@@ -1,10 +1,14 @@
-|                                                     |
-|-----------------------------------------------------|
-| title: "Playing around with the Inside Out dataset" |
-| author: "Adhavan"                                   |
-| date: "13/04/2021"                                  |
-| output: html_document                               |
-| theme: "paper"                                      |
+---
+title: "Playing around with the Inside Out dataset"
+author: "Adhavan Mohana Sivaraj"
+output:
+  pdf_document:
+    toc: yes
+  bookdown::pdf_document2:
+    toc: yes
+    number_sections: yes
+    highlight: tango
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,11 +40,18 @@ library(igraphdata)
 # What are my intentions?
 
 -   To create a heat map of sorts of conversations that take place in the movie Inside Out.
--   What will this allow me to do? - To comment on the frequency/duration of certain interactions inside and outside Riley's mind. - The thought then arises that Joy is obviously the most frequently portrayed character. So why do it at all?
+
+-   What will this allow me to do?
+
+    -   \- To comment on the frequency/duration of certain interactions inside and outside Riley's mind.
+
+    -   \- The thought then arises that Joy is obviously the most frequently portrayed character. So why do it at all?
 
 ## Beyond simply visualising the heatmap of interactions is to pick on character tells.
 
 For example: My friends tell me that Anger is stereotypically portrayed as the dominant character in the Dad's mind. And mother has her own stereotypical dominant emotion. Is this true? What other characteristic tells exist that the creators have weaved into the story wittingly or unwittingly?
+
+\newpage
 
 # Data collection
 
@@ -74,6 +85,8 @@ InsideOutNodes <- read.csv("./data/nodes_emotions.csv")
 
 -   Is there a better way to go about this?
 
+\newpage
+
 # Creating the graph
 
 ```{r creating graph object, results=FALSE}
@@ -86,13 +99,14 @@ i<-graph_from_data_frame(InsideOutEdges, vertices =InsideOutNodes, directed = T)
 autograph(i)
 ```
 
+\newpage
+
 # Visualising
 
 -   The plot is too dense at this point to arrive at any sort of conclusion. And the dataset is incomplete! What happens when the dataset is complete? Will a circle layout help?
 
 ```{r visualising iter 1}
-j<-ggraph(graph=i, layout="kk")+
-  
+j<-ggraph(graph=i, layout="kk") +
   geom_node_point(size = 1 + 0.2*degree(i), color = rgb(0,0,.1,.3)) +
   
   # geom_edge_density(n=3) +
@@ -116,15 +130,16 @@ j<-ggraph(graph=i, layout="circle") +
   
   # geom_edge_density(n=3)+
   
-  geom_edge_fan(color="white", aes(alpha = stat(index)), strength=.95) +
+  geom_edge_fan(color="black", aes(alpha = stat(index)), strength=.95) +
   
   guides(edge_alpha = guide_edge_direction()) +
   
-  geom_node_text(aes(label = name), size = 1 + 0.1*degree(i), color=rgb(.8,.8,.8,.7), repel = T) +
+  geom_node_text(aes(label = name), size = 1 + 0.1*degree(i), color="black", repel = T) 
   
-  theme_graph(base_size=22, background="black")
 j
 ```
+
+\newpage
 
 ## Play and Invent
 
@@ -132,7 +147,7 @@ j
 
 The following contain the same data with exaggerated parameters to make the data intentionally unreadable and abstract as an exploratory exercise for my Play and Invent unit S2C2.
 
-Read more from [this pdf](https://mega.nz/folder/1A4iSB6K#OLy4j7pn0ULp4oFQhDXzrQ/file/ANYGURoI)
+Read more from this pdf [click on me](https://mega.nz/folder/1A4iSB6K#OLy4j7pn0ULp4oFQhDXzrQ/file/ANYGURoI)
 
 ```{r visualising iter 3}
 j<-ggraph(graph=i, layout="kk")+
@@ -170,8 +185,6 @@ j
 
 ```
 
-## Fabric?
-
 ```{r visualising iter 5}
 
 j<-ggraph(graph=i, 'fabric', sort.by = node_rank_fabric()) + 
@@ -188,7 +201,9 @@ j
 
 ```
 
-```{r visualising iter 6}
+### No Idea how this is being visualised:
+
+```{r visualising iter 6 }
 ggraph(graph=i, 'fabric', sort.by = node_rank_fabric()) + 
   geom_node_range(colour = 'grey') + 
   geom_edge_span(end_shape = 'square') + 
